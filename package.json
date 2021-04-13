@@ -40,6 +40,10 @@
       "@commitlint/config-conventional"
     ]
   },
+  "peerDependencies": {
+    "@nestjs/common": "^7.6.15",
+    "@google-cloud/pubsub": "^2.10.0"
+  },
   "devDependencies": {
     "@commitlint/cli": "11.0.0",
     "@commitlint/config-conventional": "11.0.0",
