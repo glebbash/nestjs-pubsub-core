@@ -1,7 +1,7 @@
 import { Topic, Subscription, PubSub } from '@google-cloud/pubsub';
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { PubSubSettings, SubscriptionSettings, TopicSettings } from './pubsub.module';
-import { Token } from './utils/token';
+import { Token } from '../utils/token';
 
 @Injectable()
 export class PubSubService implements OnModuleDestroy {

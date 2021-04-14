@@ -1,12 +1,10 @@
-import { DynamicModule, Module, Provider, Type } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { ClientConfig, PubSub, SubscriptionOptions } from '@google-cloud/pubsub';
 import { getSubscriptionToken, getTopicToken } from '../nestjs-pubsub-core';
 import { PublishOptions } from '@google-cloud/pubsub/build/src/publisher';
 import { PubSubService } from './pubsub.service';
-import { Token } from './utils/token';
-
-type OptionsProvider<T> = Exclude<Provider<T>, Type>;
-type AsyncSettings<T> = Omit<OptionsProvider<T>, 'provide'>;
+import { Token } from '../utils/token';
+import { AsyncSettings, SettingsProvider } from '../utils/settings-provider';
 
 export const PubSubSettings = Symbol('PubSubSettings');
 export type PubSubSettings =
@@ -51,7 +49,7 @@ export class PubSubModule {
       module: PubSubModule,
       global: true,
       providers: [
-        <OptionsProvider<PubSubSettings>>{
+        <SettingsProvider<PubSubSettings>>{
           provide: PubSubSettings,
           ...settings,
         },
