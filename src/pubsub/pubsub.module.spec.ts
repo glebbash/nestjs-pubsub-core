@@ -1,18 +1,11 @@
-import { PubSub, Subscription, Topic } from '@google-cloud/pubsub';
+import { PubSub } from '@google-cloud/pubsub';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getSubscriptionToken, getTopicToken, PubSubModule } from '../nestjs-pubsub-core';
 import { pubSubFactory } from './pubsub.module';
+import { PubSubService } from './pubsub.service';
 
 describe('PubSubModule', () => {
   let pubSubModule: TestingModule;
-
-  const subscriptionMock: Partial<Subscription> = {};
-  const topicMock: Partial<Topic> = {
-    subscription: jest.fn().mockReturnValue(subscriptionMock),
-  };
-  const pubSubMock: Partial<PubSub> = {
-    topic: jest.fn().mockReturnValue(topicMock),
-  };
 
   const topic1 = 'topic1';
   const topic2 = 'topic2';
@@ -25,7 +18,7 @@ describe('PubSubModule', () => {
     pubSubModule = await Test.createTestingModule({
       imports: [
         PubSubModule.forRoot({
-          pubSub: pubSubMock as PubSub,
+          pubSub: new PubSub(),
           topics: {
             [topic1]: {
               name: 't1',
@@ -78,6 +71,28 @@ describe('PubSubModule', () => {
     expect(t2s2).toBeDefined();
   });
 
+  it('closes all subscriptions and pubsub itself in onModuleDestroy', async () => {
+    const service = pubSubModule.get(PubSubService);
+    const subscriptions = [
+      pubSubModule.get(getSubscriptionToken(subscription11)),
+      pubSubModule.get(getSubscriptionToken(subscription12)),
+      pubSubModule.get(getSubscriptionToken(subscription21)),
+      pubSubModule.get(getSubscriptionToken(subscription22)),
+    ];
+
+    const closeSpy = jest.spyOn(service.pubSub, 'close').mockResolvedValue(0 as never);
+    const subscriptionCloseSpies = subscriptions.map((subscription) =>
+      jest.spyOn(subscription, 'close').mockResolvedValue(0 as never)
+    );
+
+    await service.onModuleDestroy();
+
+    expect(closeSpy).toBeCalled();
+    for (const subscriptionCloseSpy of subscriptionCloseSpies) {
+      expect(subscriptionCloseSpy).toBeCalled();
+    }
+  });
+
   describe('when misconfigured', () => {
     it('throws when trying to inject unknown topic', async () => {
       await expect(
@@ -114,7 +129,7 @@ describe('PubSubModule', () => {
 
   describe('pubSubFactory', () => {
     it('returns passed PubSub', () => {
-      const pubSubMock = (1 as unknown) as PubSub;
+      const pubSubMock = new PubSub();
 
       const res = pubSubFactory({
         pubSub: pubSubMock,
