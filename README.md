@@ -3,7 +3,9 @@
 [![Deploy](https://github.com/glebbash/nestjs-pubsub-core/workflows/build/badge.svg)](https://github.com/glebbash/nestjs-pubsub-core/actions)
 [![Coverage Status](https://coveralls.io/repos/github/glebbash/nestjs-pubsub-core/badge.svg?branch=master)](https://coveralls.io/github/glebbash/nestjs-pubsub-core?branch=master)
 
-Nest.js Google PubSub module that provides topics and subscriptions specified in configuration
+Nest.js Google PubSub module that provides topics and subscriptions specified in configuration.
+
+Also provides optional PubSubPublisher service to publish to topics (handles request timeouts).
 
 ## Installation
 

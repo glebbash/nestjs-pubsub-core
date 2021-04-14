@@ -16,7 +16,7 @@ const config: Jest.Config.InitialOptions = {
     },
   },
   collectCoverageFrom: ['**/*.ts'],
-  coveragePathIgnorePatterns: ['/node_modules/'],
+  coveragePathIgnorePatterns: ['/node_modules/', '\\.d\\.ts'],
   coverageDirectory: '../.coverage',
   testEnvironment: 'node',
 };
