@@ -2708,6 +2708,9 @@ img {
 			<a href="../classes/pubsub_pubsub_module.pubsubmodule.html" class="tsd-kind-icon">Pub<wbr>Sub<wbr>Module</a>
 		</li>
 		<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+			<a href="pubsub_pubsub_module.html#pubsubclientsettings" class="tsd-kind-icon">Pub<wbr>Sub<wbr>Client<wbr>Settings</a>
+		</li>
+		<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 			<a href="pubsub_pubsub_module.html#pubsubfeaturesettings" class="tsd-kind-icon">Pub<wbr>Sub<wbr>Feature<wbr>Settings</a>
 		</li>
 		<li class=" tsd-kind-type-alias tsd-parent-kind-module">
@@ -2721,6 +2724,9 @@ img {
 		</li>
 		<li class=" tsd-kind-variable tsd-parent-kind-module">
 			<a href="pubsub_pubsub_module.html#pubsubsettings-1" class="tsd-kind-icon">Pub<wbr>Sub<wbr>Settings</a>
+		</li>
+		<li class=" tsd-kind-function tsd-parent-kind-module">
+			<a href="pubsub_pubsub_module.html#getclientconfig" class="tsd-kind-icon">get<wbr>Client<wbr>Config</a>
 		</li>
 		<li class=" tsd-kind-function tsd-parent-kind-module">
 			<a href="pubsub_pubsub_module.html#pubsubfactory" class="tsd-kind-icon">pub<wbr>Sub<wbr>Factory</a>
@@ -2742,6 +2748,7 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Type aliases</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="pubsub_pubsub_module.html#pubsubclientsettings" class="tsd-kind-icon">Pub<wbr>Sub<wbr>Client<wbr>Settings</a></li>
 							<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="pubsub_pubsub_module.html#pubsubfeaturesettings" class="tsd-kind-icon">Pub<wbr>Sub<wbr>Feature<wbr>Settings</a></li>
 							<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="pubsub_pubsub_module.html#pubsubsettings" class="tsd-kind-icon">Pub<wbr>Sub<wbr>Settings</a></li>
 							<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="pubsub_pubsub_module.html#subscriptionsettings" class="tsd-kind-icon">Subscription<wbr>Settings</a></li>
@@ -2757,6 +2764,7 @@ img {
 					<section class="tsd-index-section ">
 						<h3>Functions</h3>
 						<ul class="tsd-index-list">
+							<li class="tsd-kind-function tsd-parent-kind-module"><a href="pubsub_pubsub_module.html#getclientconfig" class="tsd-kind-icon">get<wbr>Client<wbr>Config</a></li>
 							<li class="tsd-kind-function tsd-parent-kind-module"><a href="pubsub_pubsub_module.html#pubsubfactory" class="tsd-kind-icon">pub<wbr>Sub<wbr>Factory</a></li>
 						</ul>
 					</section>
@@ -2766,12 +2774,30 @@ img {
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Type aliases</h2>
 			<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+				<a name="pubsubclientsettings" class="tsd-anchor"></a>
+				<h3>Pub<wbr>Sub<wbr>Client<wbr>Settings</h3>
+				<div class="tsd-signature tsd-kind-icon">Pub<wbr>Sub<wbr>Client<wbr>Settings<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>emulatorPort<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">ClientConfig</span></div>
+				<aside class="tsd-sources">
+					<ul>
+						<li>Defined in <a href="https://github.com/glebbash/nestjs-pubsub-core/blob/9b20595/src/pubsub/pubsub.module.ts#L29">src/pubsub/pubsub.module.ts:29</a></li>
+					</ul>
+				</aside>
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>If emulatorPort is provided this fields are set:
+							servicePath: &#39;localhost&#39;,
+							port: emulatorPort,
+						sslCreds: credentials.createInsecure(),</p>
+					</div>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 				<a name="pubsubfeaturesettings" class="tsd-anchor"></a>
 				<h3>Pub<wbr>Sub<wbr>Feature<wbr>Settings</h3>
 				<div class="tsd-signature tsd-kind-icon">Pub<wbr>Sub<wbr>Feature<wbr>Settings<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>subscriptions<span class="tsd-signature-symbol">?: </span><a href="utils_token.html#token" class="tsd-signature-type" data-tsd-kind="Type alias">Token</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">; </span>topics<span class="tsd-signature-symbol">?: </span><a href="utils_token.html#token" class="tsd-signature-type" data-tsd-kind="Type alias">Token</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/glebbash/nestjs-pubsub-core/blob/3e75144/src/pubsub/pubsub.module.ts#L36">src/pubsub/pubsub.module.ts:36</a></li>
+						<li>Defined in <a href="https://github.com/glebbash/nestjs-pubsub-core/blob/9b20595/src/pubsub/pubsub.module.ts#L60">src/pubsub/pubsub.module.ts:60</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -2789,10 +2815,10 @@ img {
 			<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 				<a name="pubsubsettings" class="tsd-anchor"></a>
 				<h3>Pub<wbr>Sub<wbr>Settings</h3>
-				<div class="tsd-signature tsd-kind-icon">Pub<wbr>Sub<wbr>Settings<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>pubSub<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PubSub</span><span class="tsd-signature-symbol">; </span>pubSubSettings<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">; </span>topics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><a href="utils_token.html#token" class="tsd-signature-type" data-tsd-kind="Type alias">Token</a><span class="tsd-signature-symbol">, </span><a href="pubsub_pubsub_module.html#topicsettings" class="tsd-signature-type" data-tsd-kind="Type alias">TopicSettings</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>pubSub<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">; </span>pubSubSettings<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ClientConfig</span><span class="tsd-signature-symbol">; </span>topics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><a href="utils_token.html#token" class="tsd-signature-type" data-tsd-kind="Type alias">Token</a><span class="tsd-signature-symbol">, </span><a href="pubsub_pubsub_module.html#topicsettings" class="tsd-signature-type" data-tsd-kind="Type alias">TopicSettings</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span></div>
+				<div class="tsd-signature tsd-kind-icon">Pub<wbr>Sub<wbr>Settings<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>pubSub<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">PubSub</span><span class="tsd-signature-symbol">; </span>pubSubSettings<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">; </span>topics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><a href="utils_token.html#token" class="tsd-signature-type" data-tsd-kind="Type alias">Token</a><span class="tsd-signature-symbol">, </span><a href="pubsub_pubsub_module.html#topicsettings" class="tsd-signature-type" data-tsd-kind="Type alias">TopicSettings</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">{ </span>pubSub<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol">; </span>pubSubSettings<span class="tsd-signature-symbol">?: </span><a href="pubsub_pubsub_module.html#pubsubclientsettings" class="tsd-signature-type" data-tsd-kind="Type alias">PubSubClientSettings</a><span class="tsd-signature-symbol">; </span>topics<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><a href="utils_token.html#token" class="tsd-signature-type" data-tsd-kind="Type alias">Token</a><span class="tsd-signature-symbol">, </span><a href="pubsub_pubsub_module.html#topicsettings" class="tsd-signature-type" data-tsd-kind="Type alias">TopicSettings</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/glebbash/nestjs-pubsub-core/blob/3e75144/src/pubsub/pubsub.module.ts#L10">src/pubsub/pubsub.module.ts:10</a></li>
+						<li>Defined in <a href="https://github.com/glebbash/nestjs-pubsub-core/blob/9b20595/src/pubsub/pubsub.module.ts#L11">src/pubsub/pubsub.module.ts:11</a></li>
 					</ul>
 				</aside>
 			</section>
@@ -2802,7 +2828,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Subscription<wbr>Settings<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">SubscriptionOptions</span><span class="tsd-signature-symbol"> }</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/glebbash/nestjs-pubsub-core/blob/3e75144/src/pubsub/pubsub.module.ts#L31">src/pubsub/pubsub.module.ts:31</a></li>
+						<li>Defined in <a href="https://github.com/glebbash/nestjs-pubsub-core/blob/9b20595/src/pubsub/pubsub.module.ts#L55">src/pubsub/pubsub.module.ts:55</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -2823,7 +2849,7 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Topic<wbr>Settings<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>options<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">PublishOptions</span><span class="tsd-signature-symbol">; </span>subscriptions<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Record</span><span class="tsd-signature-symbol">&lt;</span><a href="utils_token.html#token" class="tsd-signature-type" data-tsd-kind="Type alias">Token</a><span class="tsd-signature-symbol">, </span><a href="pubsub_pubsub_module.html#subscriptionsettings" class="tsd-signature-type" data-tsd-kind="Type alias">SubscriptionSettings</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/glebbash/nestjs-pubsub-core/blob/3e75144/src/pubsub/pubsub.module.ts#L25">src/pubsub/pubsub.module.ts:25</a></li>
+						<li>Defined in <a href="https://github.com/glebbash/nestjs-pubsub-core/blob/9b20595/src/pubsub/pubsub.module.ts#L49">src/pubsub/pubsub.module.ts:49</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -2850,13 +2876,36 @@ img {
 				<div class="tsd-signature tsd-kind-icon">Pub<wbr>Sub<wbr>Settings<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">typeof </span><a href="pubsub_pubsub_module.html#pubsubsettings-1" class="tsd-signature-type" data-tsd-kind="Variable">PubSubSettings</a><span class="tsd-signature-symbol"> = ...</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/glebbash/nestjs-pubsub-core/blob/3e75144/src/pubsub/pubsub.module.ts#L9">src/pubsub/pubsub.module.ts:9</a></li>
+						<li>Defined in <a href="https://github.com/glebbash/nestjs-pubsub-core/blob/9b20595/src/pubsub/pubsub.module.ts#L10">src/pubsub/pubsub.module.ts:10</a></li>
 					</ul>
 				</aside>
 			</section>
 		</section>
 		<section class="tsd-panel-group tsd-member-group ">
 			<h2>Functions</h2>
+			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+				<a name="getclientconfig" class="tsd-anchor"></a>
+				<h3><span class="tsd-flag ts-flagConst">Const</span> get<wbr>Client<wbr>Config</h3>
+				<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+					<li class="tsd-signature tsd-kind-icon">get<wbr>Client<wbr>Config<span class="tsd-signature-symbol">(</span>settings<span class="tsd-signature-symbol">?: </span><a href="pubsub_pubsub_module.html#pubsubclientsettings" class="tsd-signature-type" data-tsd-kind="Type alias">PubSubClientSettings</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ClientConfig</span></li>
+				</ul>
+				<ul class="tsd-descriptions">
+					<li class="tsd-description">
+						<aside class="tsd-sources">
+							<ul>
+								<li>Defined in <a href="https://github.com/glebbash/nestjs-pubsub-core/blob/9b20595/src/pubsub/pubsub.module.ts#L31">src/pubsub/pubsub.module.ts:31</a></li>
+							</ul>
+						</aside>
+						<h4 class="tsd-parameters-title">Parameters</h4>
+						<ul class="tsd-parameters">
+							<li>
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> settings: <a href="pubsub_pubsub_module.html#pubsubclientsettings" class="tsd-signature-type" data-tsd-kind="Type alias">PubSubClientSettings</a></h5>
+							</li>
+						</ul>
+						<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">ClientConfig</span></h4>
+					</li>
+				</ul>
+			</section>
 			<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 				<a name="pubsubfactory" class="tsd-anchor"></a>
 				<h3><span class="tsd-flag ts-flagConst">Const</span> pub<wbr>Sub<wbr>Factory</h3>
@@ -2867,7 +2916,7 @@ img {
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/glebbash/nestjs-pubsub-core/blob/3e75144/src/pubsub/pubsub.module.ts#L22">src/pubsub/pubsub.module.ts:22</a></li>
+								<li>Defined in <a href="https://github.com/glebbash/nestjs-pubsub-core/blob/9b20595/src/pubsub/pubsub.module.ts#L46">src/pubsub/pubsub.module.ts:46</a></li>
 							</ul>
 						</aside>
 						<h4 class="tsd-parameters-title">Parameters</h4>
