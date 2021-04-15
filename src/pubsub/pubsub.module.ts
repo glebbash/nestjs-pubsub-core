@@ -5,6 +5,7 @@ import { PublishOptions } from '@google-cloud/pubsub/build/src/publisher';
 import { PubSubService } from './pubsub.service';
 import { Token } from '../utils/token';
 import { AsyncSettings, SettingsProvider } from '../utils/settings-provider';
+import { credentials } from '@grpc/grpc-js';
 
 export const PubSubSettings = Symbol('PubSubSettings');
 export type PubSubSettings =
@@ -15,12 +16,35 @@ export type PubSubSettings =
     }
   | {
       pubSub?: undefined;
-      pubSubSettings?: ClientConfig;
+      pubSubSettings?: PubSubClientSettings;
       topics: Record<Token, TopicSettings>;
     };
 
+/**
+ * If emulatorPort is provided this fields are set:
+ *   servicePath: 'localhost',
+ *   port: emulatorPort,
+ *   sslCreds: credentials.createInsecure(),
+ */
+export type PubSubClientSettings = { emulatorPort?: number } & ClientConfig;
+
+export const getClientConfig = (settings?: PubSubClientSettings): ClientConfig | undefined => {
+  if (!settings) return undefined;
+
+  const { emulatorPort, ...config } = settings;
+
+  return emulatorPort
+    ? {
+        servicePath: 'localhost',
+        port: emulatorPort,
+        sslCreds: credentials.createInsecure(),
+        ...config,
+      }
+    : config;
+};
+
 export const pubSubFactory = (settings: PubSubSettings): PubSub =>
-  settings.pubSub ?? new PubSub(settings.pubSubSettings);
+  settings.pubSub ?? new PubSub(getClientConfig(settings.pubSubSettings));
 
 export type TopicSettings = {
   name: string;

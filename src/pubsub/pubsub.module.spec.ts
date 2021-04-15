@@ -139,7 +139,7 @@ describe('PubSubModule', () => {
       expect(res).toBe(pubSubMock);
     });
 
-    it('creates PubSub bases on config', () => {
+    it('creates PubSub based on config', () => {
       const res = pubSubFactory({
         pubSubSettings: { projectId: 'abc' },
         topics: {},
@@ -147,6 +147,18 @@ describe('PubSubModule', () => {
 
       expect(res).toBeInstanceOf(PubSub);
       expect(res.options.projectId).toBe('abc');
+    });
+
+    it('creates PubSub config for emulator', () => {
+      const res = pubSubFactory({
+        pubSubSettings: { projectId: 'abc', emulatorPort: 1234 },
+        topics: {},
+      });
+
+      expect(res).toBeInstanceOf(PubSub);
+      expect(res.options.projectId).toBe('abc');
+      expect(res.options.port).toBe(1234);
+      expect(res.options.servicePath).toBe('localhost');
     });
   });
 });
