@@ -8,7 +8,7 @@
     "typescript"
   ],
   "main": "dist/nestjs-pubsub-core.js",
-  "typings": "dist/@types/nestjs-pubsub-core.d.ts",
+  "typings": "dist/nestjs-pubsub-core.d.ts",
   "files": [
     "dist"
   ],
