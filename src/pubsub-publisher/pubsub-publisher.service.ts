@@ -21,12 +21,25 @@ export class PubSubPublisherService {
     body: Record<string, unknown>,
     attributes: Record<string, string>
   ): Promise<string> {
-    return await Promise.race([
+    let clearRequestTimeout: (() => void) | undefined;
+
+    const result = await Promise.race([
       topic.publishJSON(body, attributes),
-      new Promise<string>((_, reject) =>
-        setTimeout(() => reject(new PubSubTimeoutError()), this.settings.requestTimeoutMillis)
-      ),
+      new Promise<string>((resolve, reject) => {
+        const timeout = setTimeout(
+          () => reject(new PubSubTimeoutError()),
+          this.settings.requestTimeoutMillis
+        );
+        clearRequestTimeout = () => {
+          clearTimeout(timeout);
+          resolve('');
+        };
+      }),
     ]);
+
+    clearRequestTimeout?.();
+
+    return result;
   }
 }
 

@@ -32,6 +32,7 @@ describe('PubSubPublisherModule', () => {
 
     const mockedRes = 'abc';
     const publishJsonMock = jest.spyOn(topic, 'publishJSON').mockResolvedValue(mockedRes as never);
+    const clearTimeoutMock = jest.spyOn(global, 'clearTimeout');
 
     const body = {
       a: 1,
@@ -44,6 +45,7 @@ describe('PubSubPublisherModule', () => {
 
     expect(res).toBe(mockedRes);
     expect(publishJsonMock).toBeCalledWith(body, attributes);
+    expect(clearTimeoutMock).toBeCalled();
   });
 
   it('rejects with PubSubTimeoutError if publishing hangs', async () => {
