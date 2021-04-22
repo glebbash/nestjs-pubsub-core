@@ -37,12 +37,17 @@ export class PubSubPublisherService {
 }
 
 function setTimeoutAsync(millis: number) {
+  let timeoutResolve: () => void;
   let timeout: NodeJS.Timeout;
   const promise = new Promise<void>((resolve) => {
+    timeoutResolve = resolve;
     timeout = setTimeout(() => resolve(), millis);
   });
   return Object.assign(promise, {
-    clear: () => clearTimeout(timeout),
+    clear: () => {
+      clearTimeout(timeout);
+      timeoutResolve();
+    },
   });
 }
 
