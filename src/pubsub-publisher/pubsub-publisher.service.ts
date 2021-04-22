@@ -21,26 +21,29 @@ export class PubSubPublisherService {
     body: Record<string, unknown>,
     attributes: Record<string, string>
   ): Promise<string> {
-    let clearRequestTimeout: (() => void) | undefined;
+    const timeout = setTimeoutAsync(this.settings.requestTimeoutMillis);
 
     const result = await Promise.race([
       topic.publishJSON(body, attributes),
-      new Promise<string>((resolve, reject) => {
-        const timeout = setTimeout(
-          () => reject(new PubSubTimeoutError()),
-          this.settings.requestTimeoutMillis
-        );
-        clearRequestTimeout = () => {
-          clearTimeout(timeout);
-          resolve('');
-        };
+      timeout.then(() => {
+        throw new PubSubTimeoutError();
       }),
     ]);
 
-    clearRequestTimeout?.();
+    timeout.clear();
 
     return result;
   }
+}
+
+function setTimeoutAsync(millis: number) {
+  let timeout: NodeJS.Timeout;
+  const promise = new Promise<void>((resolve) => {
+    timeout = setTimeout(() => resolve(), millis);
+  });
+  return Object.assign(promise, {
+    clear: () => clearTimeout(timeout),
+  });
 }
 
 export class PubSubTimeoutError extends InternalServerErrorException {
