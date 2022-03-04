@@ -1,4 +1,6 @@
-jest.mock('@nestjs/common');
+jest.mock('@nestjs/common', () => ({
+  Inject: jest.fn(),
+}));
 import { Inject } from '@nestjs/common';
 import { getSubscriptionToken, InjectSubscription } from './subscription-token';
 
