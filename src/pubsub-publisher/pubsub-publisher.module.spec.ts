@@ -30,21 +30,42 @@ describe('PubSubPublisherModule', () => {
     const pubSubService = publisherModule.get(PubSubService);
     const topic = pubSubService.getTopic(MainTopic);
 
-    const mockedRes = 'abc';
-    const publishJsonMock = jest.spyOn(topic, 'publishJSON').mockResolvedValue(mockedRes as never);
+    const mockedRes = ['abc'];
+    const publishJsonMock = jest.spyOn(topic, 'publishMessage').mockResolvedValue(mockedRes as never);
     const clearTimeoutMock = jest.spyOn(global, 'clearTimeout');
 
-    const body = {
+    const data = {
       a: 1,
     };
     const attributes = {
       event: 'created',
     };
 
-    const res = await service.publish(MainTopic, body, attributes);
+    const res = await service.publish(MainTopic, data, attributes);
 
-    expect(res).toBe(mockedRes);
-    expect(publishJsonMock).toBeCalledWith(body, attributes);
+    expect(res).toBe(mockedRes[0]);
+    expect(publishJsonMock).toBeCalledWith({ data: Buffer.from(JSON.stringify(data)), attributes });
+    expect(clearTimeoutMock).toBeCalled();
+  });
+
+  it('publishes to topic raw buffer', async () => {
+    const service = publisherModule.get(PubSubPublisherService);
+    const pubSubService = publisherModule.get(PubSubService);
+    const topic = pubSubService.getTopic(MainTopic);
+
+    const mockedRes = ['abc'];
+    const publishJsonMock = jest.spyOn(topic, 'publishMessage').mockResolvedValue(mockedRes as never);
+    const clearTimeoutMock = jest.spyOn(global, 'clearTimeout');
+
+    const data = Buffer.from('hello world');
+    const attributes = {
+      event: 'created',
+    };
+
+    const res = await service.publishRaw(MainTopic, data, attributes);
+
+    expect(res).toBe(mockedRes[0]);
+    expect(publishJsonMock).toBeCalledWith({ data, attributes });
     expect(clearTimeoutMock).toBeCalled();
   });
 
@@ -53,7 +74,7 @@ describe('PubSubPublisherModule', () => {
     const pubSubService = publisherModule.get(PubSubService);
     const topic = pubSubService.getTopic(MainTopic);
 
-    jest.spyOn(topic, 'publishJSON').mockReturnValue(new Promise(() => 0) as never);
+    jest.spyOn(topic, 'publishMessage').mockReturnValue(new Promise(() => 0) as never);
 
     await expect(service.publish(MainTopic, {}, {})).rejects.toThrow(PubSubTimeoutError);
   });

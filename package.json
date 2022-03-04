@@ -41,8 +41,8 @@
     ]
   },
   "peerDependencies": {
-    "@nestjs/common": "^7.6.15",
-    "@google-cloud/pubsub": "^2.10.0"
+    "@nestjs/common": ">= 8",
+    "@google-cloud/pubsub": ">= 2"
   },
   "devDependencies": {
     "@commitlint/cli": "11.0.0",

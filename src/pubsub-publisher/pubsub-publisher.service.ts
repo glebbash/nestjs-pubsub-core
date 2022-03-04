@@ -10,21 +10,37 @@ export class PubSubPublisherService {
 
   async publish(
     token: Token,
-    body: Record<string, unknown>,
+    data: Record<string, unknown>,
     attributes: Record<string, string>
   ): Promise<string> {
-    return this.publishToTopic(this.pubSubService.getTopic(token), body, attributes);
+    return this.publishToTopic(this.pubSubService.getTopic(token), data, attributes);
   }
 
   async publishToTopic(
     topic: Topic,
-    body: Record<string, unknown>,
+    data: Record<string, unknown>,
+    attributes: Record<string, string>
+  ): Promise<string> {
+    return this.publishToTopicRaw(topic, Buffer.from(JSON.stringify(data)), attributes);
+  }
+
+  async publishRaw(
+    token: Token,
+    data: Buffer,
+    attributes: Record<string, string>
+  ): Promise<string> {
+    return this.publishToTopicRaw(this.pubSubService.getTopic(token), data, attributes);
+  }
+
+  async publishToTopicRaw(
+    topic: Topic,
+    data: Buffer,
     attributes: Record<string, string>
   ): Promise<string> {
     const timeout = setTimeoutAsync(this.settings.requestTimeoutMillis);
 
-    const result = await Promise.race([
-      topic.publishJSON(body, attributes),
+    const [result] = await Promise.race([
+      topic.publishMessage({ data, attributes }),
       timeout.then(() => {
         throw new PubSubTimeoutError();
       }),
