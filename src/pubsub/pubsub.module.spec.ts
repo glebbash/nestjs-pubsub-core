@@ -8,11 +8,12 @@ describe('PubSubModule', () => {
   let pubSubModule: TestingModule;
 
   const topic1 = 'topic1';
-  const topic2 = 'topic2';
   const subscription11 = 'subscription11';
   const subscription12 = 'subscription12';
-  const subscription21 = 'subscription21';
-  const subscription22 = 'subscription22';
+
+  const topic2 = Symbol('topic2');
+  const subscription21 = Symbol('subscription21');
+  const subscription22 = Symbol('subscription22');
 
   beforeEach(async () => {
     pubSubModule = await Test.createTestingModule({
@@ -33,9 +34,6 @@ describe('PubSubModule', () => {
                 [subscription21]: { name: 't2s1' },
                 [subscription22]: { name: 't2s2' },
               },
-            },
-            topic3: {
-              name: 't3',
             },
           },
         }),

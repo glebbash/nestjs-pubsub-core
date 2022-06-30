@@ -41,7 +41,7 @@ export class PubSubService implements OnModuleDestroy {
   }
 
   async onModuleDestroy(): Promise<void> {
-    for (const subscription of Object.values(this.openSubscriptions)) {
+    for (const subscription of allValues(this.openSubscriptions)) {
       await subscription.close();
     }
 
@@ -55,17 +55,35 @@ function createSubscriptionsStore(
   topics: Record<Token, TopicSettings>
 ): Record<Token, FullSubscriptionSettings> {
   return Object.fromEntries(
-    Object.entries(topics)
+    allEntries(topics)
       .map(([topic, topicSettings]) =>
-        Object.entries(
-          topicSettings.subscriptions ?? {}
-        ).map(([subscription, subscriptionSettings]) => [
-          subscription,
-          { topic, ...subscriptionSettings },
-        ])
+        allEntries(topicSettings.subscriptions ?? {}).map(
+          ([subscription, subscriptionSettings]) => [
+            subscription,
+            { topic, ...subscriptionSettings },
+          ]
+        )
       )
       .flat()
   );
+}
+
+/**
+ * Returns all entries of the given object, including symbols.
+ */
+function allEntries<K extends string | symbol, V>(obj: Record<K, V>): [K, V][] {
+  const stringKeys = Object.keys(obj) as K[];
+  const symbolKeys = Object.getOwnPropertySymbols(obj) as K[];
+  return [...stringKeys, ...symbolKeys].map((key) => [key, obj[key]]);
+}
+
+/**
+ * Returns all values of the given object, including symbols.
+ */
+function allValues<K extends string | symbol, V>(obj: Record<K, V>): V[] {
+  const stringKeys = Object.keys(obj) as K[];
+  const symbolKeys = Object.getOwnPropertySymbols(obj) as K[];
+  return [...stringKeys, ...symbolKeys].map((key) => obj[key]);
 }
 
 function useCache<K extends string | number | symbol, V>(
