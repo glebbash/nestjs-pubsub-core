@@ -8,16 +8,24 @@ import { AsyncSettings, SettingsProvider } from '../utils/settings-provider';
 import { credentials } from '@grpc/grpc-js';
 
 export const PubSubSettings = Symbol('PubSubSettings');
-export type PubSubSettings =
+export type PubSubSettings = PubSubInstanceOrSettings & {
+  topics: Record<Token, TopicSettings>;
+  /**
+   * By default all accessed subscription and pubsub instanc
+   * will be closed on module destroy. You can disable this
+   * behavior by setting this to false.
+   */
+  closeOnModuleDestroy?: false;
+};
+
+export type PubSubInstanceOrSettings =
   | {
       pubSub: PubSub;
       pubSubSettings?: undefined;
-      topics: Record<Token, TopicSettings>;
     }
   | {
       pubSub?: undefined;
-      pubSubSettings?: PubSubClientSettings;
-      topics: Record<Token, TopicSettings>;
+      pubSubSettings: PubSubClientSettings;
     };
 
 /**

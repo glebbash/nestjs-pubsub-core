@@ -11,7 +11,7 @@ export class PubSubService implements OnModuleDestroy {
   private openTopics: Record<Token, Topic> = {};
   private openSubscriptions: Record<Token, Subscription> = {};
 
-  constructor(public readonly pubSub: PubSub, settings: PubSubSettings) {
+  constructor(public readonly pubSub: PubSub, private settings: PubSubSettings) {
     this.topicsSettings = settings.topics;
     this.subscriptionsSettings = createSubscriptionsStore(settings.topics);
   }
@@ -40,9 +40,19 @@ export class PubSubService implements OnModuleDestroy {
     });
   }
 
+  getAllAccessedSubscriptions(): Subscription[] {
+    return allValues(this.openSubscriptions);
+  }
+
   async onModuleDestroy(): Promise<void> {
-    for (const subscription of allValues(this.openSubscriptions)) {
-      await subscription.close();
+    if (this.settings.closeOnModuleDestroy === false) {
+      return;
+    }
+
+    for (const subscription of this.getAllAccessedSubscriptions()) {
+      if (subscription.isOpen) {
+        await subscription.close();
+      }
     }
 
     await this.pubSub.close();

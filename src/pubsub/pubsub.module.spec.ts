@@ -1,7 +1,7 @@
 import { PubSub } from '@google-cloud/pubsub';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getSubscriptionToken, getTopicToken, PubSubModule } from '../nestjs-pubsub-core';
-import { pubSubFactory } from './pubsub.module';
+import { pubSubFactory, PubSubSettings } from './pubsub.module';
 import { PubSubService } from './pubsub.service';
 
 describe('PubSubModule', () => {
@@ -69,7 +69,7 @@ describe('PubSubModule', () => {
     expect(t2s2).toBeDefined();
   });
 
-  it('closes all subscriptions and pubsub itself in onModuleDestroy', async () => {
+  it('closes all open subscriptions and pubsub itself in onModuleDestroy', async () => {
     const service = pubSubModule.get(PubSubService);
     const subscriptions = [
       pubSubModule.get(getSubscriptionToken(subscription11)),
@@ -79,15 +79,47 @@ describe('PubSubModule', () => {
     ];
 
     const closeSpy = jest.spyOn(service.pubSub, 'close').mockResolvedValue(0 as never);
-    const subscriptionCloseSpies = subscriptions.map((subscription) =>
-      jest.spyOn(subscription, 'close').mockResolvedValue(0 as never)
-    );
+    for (const subscription of subscriptions) {
+      Object.defineProperty(subscription, 'isOpen', { value: Math.random() > 0.5 });
+      jest.spyOn(subscription, 'close').mockResolvedValue(0 as never);
+    }
 
     await service.onModuleDestroy();
 
     expect(closeSpy).toBeCalled();
-    for (const subscriptionCloseSpy of subscriptionCloseSpies) {
-      expect(subscriptionCloseSpy).toBeCalled();
+    for (const subscription of subscriptions) {
+      if (subscription.isOpen) {
+        expect(subscription.close).toBeCalled();
+      } else {
+        expect(subscription.close).not.toBeCalled();
+      }
+    }
+  });
+
+  it('does not close anything if closeOnModuleDestroy is set to false', async () => {
+    const service = pubSubModule.get(PubSubService) as Omit<PubSubService, 'settings'> & {
+      settings: PubSubSettings;
+    };
+    service.settings.closeOnModuleDestroy = false;
+
+    const subscriptions = [
+      pubSubModule.get(getSubscriptionToken(subscription11)),
+      pubSubModule.get(getSubscriptionToken(subscription12)),
+      pubSubModule.get(getSubscriptionToken(subscription21)),
+      pubSubModule.get(getSubscriptionToken(subscription22)),
+    ];
+
+    const closeSpy = jest.spyOn(service.pubSub, 'close').mockResolvedValue(0 as never);
+    for (const subscription of subscriptions) {
+      Object.defineProperty(subscription, 'isOpen', { value: true });
+      jest.spyOn(subscription, 'close').mockResolvedValue(0 as never);
+    }
+
+    await service.onModuleDestroy();
+
+    expect(closeSpy).not.toBeCalled();
+    for (const subscription of subscriptions) {
+      expect(subscription.close).not.toBeCalled();
     }
   });
 
