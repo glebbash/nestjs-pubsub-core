@@ -7,10 +7,10 @@
     "pubsub",
     "typescript"
   ],
-  "main": "dist/nestjs-pubsub-core.js",
-  "typings": "dist/nestjs-pubsub-core.d.ts",
+  "main": "lib/nestjs-pubsub-core.js",
+  "typings": "lib/nestjs-pubsub-core.d.ts",
   "files": [
-    "dist"
+    "lib"
   ],
   "author": "glebbash <glebbash@gmail.com>",
   "repository": {
@@ -23,7 +23,7 @@
   },
   "scripts": {
     "lint": "eslint --fix 'src/**/*.ts'",
-    "prebuild": "rimraf dist",
+    "prebuild": "rimraf lib",
     "build": "tsc --project tsconfig.build.json",
     "build:docs": "typedoc --out docs src/nestjs-pubsub-core.ts",
     "test": "jest --config jest.config.ts --coverage",
