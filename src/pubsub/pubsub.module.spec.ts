@@ -69,58 +69,39 @@ describe('PubSubModule', () => {
     expect(t2s2).toBeDefined();
   });
 
-  it('closes all open subscriptions and pubsub itself in onModuleDestroy', async () => {
+  it('returns accesed topics and subscriptions correctly', () => {
+    const ps = pubSubModule.get(PubSubService);
+
+    const t1 = ps.getTopic(topic1);
+    const s1 = ps.getSubscription(subscription11);
+    const s2 = ps.getSubscription(subscription12);
+
+    expect(ps.getAllAccessedTopics()).toContain(t1);
+    expect(ps.getAllAccessedSubscriptions()).toContain(s1);
+    expect(ps.getAllAccessedSubscriptions()).toContain(s2);
+  });
+
+  it('closes pubsub in onModuleDestroy', async () => {
     const service = pubSubModule.get(PubSubService);
-    const subscriptions = [
-      pubSubModule.get(getSubscriptionToken(subscription11)),
-      pubSubModule.get(getSubscriptionToken(subscription12)),
-      pubSubModule.get(getSubscriptionToken(subscription21)),
-      pubSubModule.get(getSubscriptionToken(subscription22)),
-    ];
 
     const closeSpy = jest.spyOn(service.pubSub, 'close').mockResolvedValue(0 as never);
-    for (const subscription of subscriptions) {
-      Object.defineProperty(subscription, 'isOpen', { value: Math.random() > 0.5 });
-      jest.spyOn(subscription, 'close').mockResolvedValue(0 as never);
-    }
 
     await service.onModuleDestroy();
 
     expect(closeSpy).toBeCalled();
-    for (const subscription of subscriptions) {
-      if (subscription.isOpen) {
-        expect(subscription.close).toBeCalled();
-      } else {
-        expect(subscription.close).not.toBeCalled();
-      }
-    }
   });
 
-  it('does not close anything if closeOnModuleDestroy is set to false', async () => {
+  it('does not close pubsub if closeOnModuleDestroy is set to false', async () => {
     const service = pubSubModule.get(PubSubService) as Omit<PubSubService, 'settings'> & {
       settings: PubSubSettings;
     };
     service.settings.closeOnModuleDestroy = false;
 
-    const subscriptions = [
-      pubSubModule.get(getSubscriptionToken(subscription11)),
-      pubSubModule.get(getSubscriptionToken(subscription12)),
-      pubSubModule.get(getSubscriptionToken(subscription21)),
-      pubSubModule.get(getSubscriptionToken(subscription22)),
-    ];
-
     const closeSpy = jest.spyOn(service.pubSub, 'close').mockResolvedValue(0 as never);
-    for (const subscription of subscriptions) {
-      Object.defineProperty(subscription, 'isOpen', { value: true });
-      jest.spyOn(subscription, 'close').mockResolvedValue(0 as never);
-    }
 
     await service.onModuleDestroy();
 
     expect(closeSpy).not.toBeCalled();
-    for (const subscription of subscriptions) {
-      expect(subscription.close).not.toBeCalled();
-    }
   });
 
   describe('when misconfigured', () => {

@@ -11,9 +11,8 @@ export const PubSubSettings = Symbol('PubSubSettings');
 export type PubSubSettings = PubSubInstanceOrSettings & {
   topics: Record<Token, TopicSettings>;
   /**
-   * By default all accessed subscription and pubsub instanc
-   * will be closed on module destroy. You can disable this
-   * behavior by setting this to false.
+   * By default the pubsub instance is closed on module destroy.
+   * You can disable this behavior by setting this to false.
    */
   closeOnModuleDestroy?: false;
 };

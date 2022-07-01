@@ -40,6 +40,10 @@ export class PubSubService implements OnModuleDestroy {
     });
   }
 
+  getAllAccessedTopics(): Topic[] {
+    return allValues(this.openTopics);
+  }
+
   getAllAccessedSubscriptions(): Subscription[] {
     return allValues(this.openSubscriptions);
   }
@@ -47,12 +51,6 @@ export class PubSubService implements OnModuleDestroy {
   async onModuleDestroy(): Promise<void> {
     if (this.settings.closeOnModuleDestroy === false) {
       return;
-    }
-
-    for (const subscription of this.getAllAccessedSubscriptions()) {
-      if (subscription.isOpen) {
-        await subscription.close();
-      }
     }
 
     await this.pubSub.close();
