@@ -1,3 +1,4 @@
+import { PubSub } from '@google-cloud/pubsub';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PubSubService } from '../nestjs-pubsub-core';
 import { PubSubModule } from '../pubsub/pubsub.module';
@@ -12,7 +13,10 @@ describe('PubSubPublisherModule', () => {
     publisherModule = await Test.createTestingModule({
       imports: [
         PubSubModule.forRoot({
-          topics: { [MainTopic]: { name: 'main-topic' } },
+          pubSub: new PubSub(),
+          topics: {
+            [MainTopic]: { name: 'main-topic' },
+          },
         }),
         PubSubPublisherModule.forFeature({
           requestTimeoutMillis: 200,
@@ -31,7 +35,9 @@ describe('PubSubPublisherModule', () => {
     const topic = pubSubService.getTopic(MainTopic);
 
     const mockedRes = ['abc'];
-    const publishJsonMock = jest.spyOn(topic, 'publishMessage').mockResolvedValue(mockedRes as never);
+    const publishJsonMock = jest
+      .spyOn(topic, 'publishMessage')
+      .mockResolvedValue(mockedRes as never);
     const clearTimeoutMock = jest.spyOn(global, 'clearTimeout');
 
     const data = {
@@ -54,7 +60,9 @@ describe('PubSubPublisherModule', () => {
     const topic = pubSubService.getTopic(MainTopic);
 
     const mockedRes = ['abc'];
-    const publishJsonMock = jest.spyOn(topic, 'publishMessage').mockResolvedValue(mockedRes as never);
+    const publishJsonMock = jest
+      .spyOn(topic, 'publishMessage')
+      .mockResolvedValue(mockedRes as never);
     const clearTimeoutMock = jest.spyOn(global, 'clearTimeout');
 
     const data = Buffer.from('hello world');

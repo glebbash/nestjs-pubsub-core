@@ -36,9 +36,7 @@ export type PubSubInstanceOrSettings =
  */
 export type PubSubClientSettings = { emulatorPort?: number } & ClientConfig;
 
-export const getClientConfig = (settings?: PubSubClientSettings): ClientConfig | undefined => {
-  if (!settings) return undefined;
-
+export const getClientConfig = (settings: PubSubClientSettings): ClientConfig | undefined => {
   const { emulatorPort, ...config } = settings;
 
   return emulatorPort
