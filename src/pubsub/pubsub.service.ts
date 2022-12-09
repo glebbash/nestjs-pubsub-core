@@ -3,6 +3,8 @@ import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { PubSubSettings, SubscriptionSettings, TopicSettings } from './pubsub.module';
 import { Token } from '../utils/token';
 
+import { PubSubPublisherSettings } from '../pubsub-publisher/pubsub-publisher.module';
+
 @Injectable()
 export class PubSubService implements OnModuleDestroy {
   private topicsSettings: Record<Token, TopicSettings>;
@@ -11,7 +13,11 @@ export class PubSubService implements OnModuleDestroy {
   private openTopics: Record<Token, Topic> = {};
   private openSubscriptions: Record<Token, Subscription> = {};
 
-  constructor(public readonly pubSub: PubSub, private settings: PubSubSettings) {
+  constructor(
+    public readonly pubSub: PubSub,
+    private settings: PubSubSettings,
+    private retrySettings: PubSubPublisherSettings
+  ) {
     this.topicsSettings = settings.topics;
     this.subscriptionsSettings = createSubscriptionsStore(settings.topics);
   }
@@ -24,7 +30,19 @@ export class PubSubService implements OnModuleDestroy {
       }
 
       const { name, options } = topicSettings;
-      return this.pubSub.topic(name, options);
+      return this.pubSub.topic(name, {
+        ...options,
+        gaxOpts: {
+          retry: {
+            backoffSettings: {
+              initialRetryDelayMillis: 1,
+              retryDelayMultiplier: 1.3,
+              maxRetryDelayMillis: 100,
+              totalTimeoutMillis: this.retrySettings.requestTimeoutMillis,
+            },
+          },
+        },
+      });
     });
   }
 

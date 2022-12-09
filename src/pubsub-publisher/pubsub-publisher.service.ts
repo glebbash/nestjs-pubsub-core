@@ -37,34 +37,9 @@ export class PubSubPublisherService {
     data: Buffer,
     attributes: Record<string, string>
   ): Promise<string> {
-    const timeout = setTimeoutAsync(this.settings.requestTimeoutMillis);
-
-    const [result] = await Promise.race([
-      topic.publishMessage({ data, attributes }),
-      timeout.then(() => {
-        throw new PubSubTimeoutError();
-      }),
-    ]);
-
-    timeout.clear();
-
+    const [result] = await topic.publishMessage({ data, attributes });
     return result;
   }
-}
-
-function setTimeoutAsync(millis: number) {
-  let timeoutResolve: () => void;
-  let timeout: NodeJS.Timeout;
-  const promise = new Promise<void>((resolve) => {
-    timeoutResolve = resolve;
-    timeout = setTimeout(() => resolve(), millis);
-  });
-  return Object.assign(promise, {
-    clear: () => {
-      clearTimeout(timeout);
-      timeoutResolve();
-    },
-  });
 }
 
 export class PubSubTimeoutError extends InternalServerErrorException {
