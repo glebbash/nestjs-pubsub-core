@@ -13,7 +13,7 @@ export class PubSubPublisherService {
     data: Record<string, unknown>,
     attributes: Record<string, string>
   ): Promise<string> {
-    return this.publishToTopic(this.pubSubService.getTopic(token), data, attributes);
+    return this.publishToTopic(this.pubSubService.getTopic(token, this.settings), data, attributes);
   }
 
   async publishToTopic(

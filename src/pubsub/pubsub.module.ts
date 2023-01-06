@@ -6,7 +6,6 @@ import { PubSubService } from './pubsub.service';
 import { Token } from '../utils/token';
 import { AsyncSettings, SettingsProvider } from '../utils/settings-provider';
 import { credentials } from '@grpc/grpc-js';
-import { PubSubPublisherSettings } from '../pubsub-publisher/pubsub-publisher.module';
 
 export const PubSubSettings = Symbol('PubSubSettings');
 export type PubSubSettings = PubSubInstanceOrSettings & {
@@ -79,10 +78,6 @@ export class PubSubModule {
       module: PubSubModule,
       global: true,
       providers: [
-        <SettingsProvider<PubSubPublisherSettings>>{
-          provide: PubSubPublisherSettings,
-          ...settings,
-        },
         <SettingsProvider<PubSubSettings>>{
           provide: PubSubSettings,
           ...settings,
@@ -94,12 +89,9 @@ export class PubSubModule {
         },
         {
           provide: PubSubService,
-          inject: [PubSub, PubSubSettings, PubSubPublisherSettings],
-          useFactory: (
-            pubSub: PubSub,
-            settings: PubSubSettings,
-            timeoutMillis: PubSubPublisherSettings
-          ) => new PubSubService(pubSub, settings, timeoutMillis),
+          inject: [PubSub, PubSubSettings],
+          useFactory: (pubSub: PubSub, settings: PubSubSettings) =>
+            new PubSubService(pubSub, settings),
         },
       ],
       exports: [PubSubService],

@@ -14,16 +14,12 @@ export class PubSubService implements OnModuleDestroy {
   private openTopics: Record<Token, Topic> = {};
   private openSubscriptions: Record<Token, Subscription> = {};
 
-  constructor(
-    public readonly pubSub: PubSub,
-    private settings: PubSubSettings,
-    private timeoutMillis: PubSubPublisherSettings
-  ) {
+  constructor(public readonly pubSub: PubSub, private settings: PubSubSettings) {
     this.topicsSettings = settings.topics;
     this.subscriptionsSettings = createSubscriptionsStore(settings.topics);
   }
 
-  getTopic(token: Token): Topic {
+  getTopic(token: Token, settings: Partial<PubSubPublisherSettings> = {}): Topic {
     return useCache(this.openTopics, token, (token) => {
       const topicSettings = this.topicsSettings[token as string];
       if (!topicSettings) {
@@ -32,7 +28,7 @@ export class PubSubService implements OnModuleDestroy {
 
       const { name, options: userOptions } = topicSettings;
       const options = mergeObjects(
-        defaultRetryOptions(this.timeoutMillis.requestTimeoutMillis),
+        defaultRetryOptions(settings),
         userOptions as Record<string, unknown>
       );
       return this.pubSub.topic(name, options);
