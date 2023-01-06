@@ -28,7 +28,7 @@ export class PubSubService implements OnModuleDestroy {
 
       const { name, options: userOptions } = topicSettings;
       const options = mergeObjects(
-        defaultRetryOptions(settings),
+        defaultRetryOptions(settings) as Record<string, unknown>,
         userOptions as Record<string, unknown>
       );
       return this.pubSub.topic(name, options);
