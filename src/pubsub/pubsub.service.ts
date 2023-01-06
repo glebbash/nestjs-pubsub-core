@@ -2,6 +2,9 @@ import { Topic, Subscription, PubSub } from '@google-cloud/pubsub';
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { PubSubSettings, SubscriptionSettings, TopicSettings } from './pubsub.module';
 import { Token } from '../utils/token';
+import { defaultRetryOptions } from '../utils/default-retry-options';
+import { PubSubPublisherSettings } from '../pubsub-publisher/pubsub-publisher.module';
+import { mergeObjects } from '../utils/deep-merge-object';
 
 @Injectable()
 export class PubSubService implements OnModuleDestroy {
@@ -16,14 +19,18 @@ export class PubSubService implements OnModuleDestroy {
     this.subscriptionsSettings = createSubscriptionsStore(settings.topics);
   }
 
-  getTopic(token: Token): Topic {
+  getTopic(token: Token, settings: Partial<PubSubPublisherSettings> = {}): Topic {
     return useCache(this.openTopics, token, (token) => {
       const topicSettings = this.topicsSettings[token as string];
       if (!topicSettings) {
         throw new Error(`Cannot find topic by alias: ${String(token)}`);
       }
 
-      const { name, options } = topicSettings;
+      const { name, options: userOptions } = topicSettings;
+      const options = mergeObjects(
+        defaultRetryOptions(settings),
+        userOptions as Record<string, unknown>
+      );
       return this.pubSub.topic(name, options);
     });
   }

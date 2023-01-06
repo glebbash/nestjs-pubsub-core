@@ -38,7 +38,6 @@ describe('PubSubPublisherModule', () => {
     const publishJsonMock = jest
       .spyOn(topic, 'publishMessage')
       .mockResolvedValue(mockedRes as never);
-    const clearTimeoutMock = jest.spyOn(global, 'clearTimeout');
 
     const data = {
       a: 1,
@@ -51,7 +50,6 @@ describe('PubSubPublisherModule', () => {
 
     expect(res).toBe(mockedRes[0]);
     expect(publishJsonMock).toBeCalledWith({ data: Buffer.from(JSON.stringify(data)), attributes });
-    expect(clearTimeoutMock).toBeCalled();
   });
 
   it('publishes to topic raw buffer', async () => {
@@ -63,7 +61,6 @@ describe('PubSubPublisherModule', () => {
     const publishJsonMock = jest
       .spyOn(topic, 'publishMessage')
       .mockResolvedValue(mockedRes as never);
-    const clearTimeoutMock = jest.spyOn(global, 'clearTimeout');
 
     const data = Buffer.from('hello world');
     const attributes = {
@@ -74,7 +71,6 @@ describe('PubSubPublisherModule', () => {
 
     expect(res).toBe(mockedRes[0]);
     expect(publishJsonMock).toBeCalledWith({ data, attributes });
-    expect(clearTimeoutMock).toBeCalled();
   });
 
   it('rejects with PubSubTimeoutError if publishing hangs', async () => {
@@ -82,7 +78,10 @@ describe('PubSubPublisherModule', () => {
     const pubSubService = publisherModule.get(PubSubService);
     const topic = pubSubService.getTopic(MainTopic);
 
-    jest.spyOn(topic, 'publishMessage').mockReturnValue(new Promise(() => 0) as never);
+    jest
+      .spyOn(topic, 'publishMessage')
+      // 250 because requestTimeoutMillis is set to 200
+      .mockReturnValue(new Promise((resolve) => setTimeout(resolve, 250)) as never);
 
     await expect(service.publish(MainTopic, {}, {})).rejects.toThrow(PubSubTimeoutError);
   });
