@@ -2,9 +2,7 @@ import { Topic, Subscription, PubSub } from '@google-cloud/pubsub';
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { PubSubSettings, SubscriptionSettings, TopicSettings } from './pubsub.module';
 import { Token } from '../utils/token';
-import { defaultRetryOptions } from '../utils/default-retry-options';
 import { PubSubPublisherSettings } from '../pubsub-publisher/pubsub-publisher.module';
-import { mergeObjects } from '../utils/deep-merge-object';
 
 @Injectable()
 export class PubSubService implements OnModuleDestroy {
@@ -19,6 +17,12 @@ export class PubSubService implements OnModuleDestroy {
     this.subscriptionsSettings = createSubscriptionsStore(settings.topics);
   }
 
+  /**
+   * Setting `settings.requestTimeoutMillis` changes
+   * `gaxOpts.retry.backoffSettings.maxRetryDelayMillis` value.
+   *
+   * **Note**: Topic options defined in `PubSubModule` will take precedence over the `settings`.
+   */
   getTopic(token: Token, settings: Partial<PubSubPublisherSettings> = {}): Topic {
     return useCache(this.openTopics, token, (token) => {
       const topicSettings = this.topicsSettings[token as string];
@@ -26,12 +30,18 @@ export class PubSubService implements OnModuleDestroy {
         throw new Error(`Cannot find topic by alias: ${String(token)}`);
       }
 
-      const { name, options: userOptions } = topicSettings;
-      const options = mergeObjects(
-        defaultRetryOptions(settings) as Record<string, unknown>,
-        userOptions as Record<string, unknown>
-      );
-      return this.pubSub.topic(name, options);
+      return this.pubSub.topic(topicSettings.name, {
+        gaxOpts: {
+          retry: {
+            backoffSettings: {
+              initialRetryDelayMillis: 100,
+              retryDelayMultiplier: 1.3,
+              maxRetryDelayMillis: settings.requestTimeoutMillis ?? 60000,
+            },
+          },
+        },
+        ...topicSettings.options,
+      });
     });
   }
 
