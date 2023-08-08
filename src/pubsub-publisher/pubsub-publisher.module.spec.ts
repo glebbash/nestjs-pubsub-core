@@ -20,6 +20,10 @@ describe('PubSubPublisherModule', () => {
         }),
         PubSubPublisherModule.forFeature({
           requestTimeoutMillis: 200,
+          batching: {
+            maxMessages: 100,
+            maxMilliseconds: 1000,
+          },
         }),
       ],
     }).compile();

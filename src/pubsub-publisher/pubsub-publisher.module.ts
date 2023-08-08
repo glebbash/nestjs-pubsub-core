@@ -2,10 +2,12 @@ import { DynamicModule, Module } from '@nestjs/common';
 import { AsyncSettings, SettingsProvider } from '../utils/settings-provider';
 import { PubSubService } from '../pubsub/pubsub.service';
 import { PubSubPublisherService } from './pubsub-publisher.service';
+import { PublishOptions } from '@google-cloud/pubsub';
 
 export const PubSubPublisherSettings = Symbol('PubSubPublisherSettings');
 export type PubSubPublisherSettings = {
   requestTimeoutMillis: number;
+  batching?: PublishOptions['batching'];
 };
 
 @Module({})
