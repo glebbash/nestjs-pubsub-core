@@ -48,7 +48,7 @@ describe('PubSubPublisherModule', () => {
 
     const res = await service.publish(MainTopic, data, attributes);
 
-    expect(res).toBe(mockedRes[0]);
+    expect(res).toBe(mockedRes);
     expect(publishJsonMock).toBeCalledWith({ data: Buffer.from(JSON.stringify(data)), attributes });
   });
 
@@ -69,7 +69,7 @@ describe('PubSubPublisherModule', () => {
 
     const res = await service.publishRaw(MainTopic, data, attributes);
 
-    expect(res).toBe(mockedRes[0]);
+    expect(res).toBe(mockedRes);
     expect(publishJsonMock).toBeCalledWith({ data, attributes });
   });
 
