@@ -37,11 +37,11 @@ export class PubSubPublisherService {
     data: Buffer,
     attributes: Record<string, string>
   ): Promise<string> {
-    const [result] = (await topic.publishMessage({ data, attributes })) || [];
-    if (!result) {
+    const messageId = (await topic.publishMessage({ data, attributes })) || '';
+    if (!messageId) {
       throw new PubSubTimeoutError();
     }
-    return result;
+    return messageId;
   }
 }
 

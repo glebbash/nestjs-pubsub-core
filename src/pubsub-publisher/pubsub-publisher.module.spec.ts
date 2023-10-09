@@ -34,7 +34,7 @@ describe('PubSubPublisherModule', () => {
     const pubSubService = publisherModule.get(PubSubService);
     const topic = pubSubService.getTopic(MainTopic);
 
-    const mockedRes = ['abc'];
+    const mockedRes = 'abc';
     const publishJsonMock = jest
       .spyOn(topic, 'publishMessage')
       .mockResolvedValue(mockedRes as never);
@@ -57,7 +57,7 @@ describe('PubSubPublisherModule', () => {
     const pubSubService = publisherModule.get(PubSubService);
     const topic = pubSubService.getTopic(MainTopic);
 
-    const mockedRes = ['abc'];
+    const mockedRes = 'abc';
     const publishJsonMock = jest
       .spyOn(topic, 'publishMessage')
       .mockResolvedValue(mockedRes as never);
